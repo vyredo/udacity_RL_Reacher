@@ -1,10 +1,8 @@
-lear
-
 # Reinforcement Learning Nanodegree - Reacher Unity Environment Report
 
 ## Pretrained execution
 
-Below is the youtube video of running pretrained model.
+Below is the youtube video of running pretrained model (click to open in youtube).
 <a href="https://www.youtube.com/watch?v=fT6UDkvKAaI">
 <img src="https://github.com/vyredo/udacity_RL_Reacher/blob/main/Report/udacity_reacher_20_agents.jpg"/>
 </a>
