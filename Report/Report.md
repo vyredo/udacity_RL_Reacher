@@ -1,14 +1,16 @@
+lear
+
 # Reinforcement Learning Nanodegree - Reacher Unity Environment Report
 
 ## Pretrained execution
 
 Below is the youtube video of running pretrained model.
 <a href="https://www.youtube.com/watch?v=fT6UDkvKAaI">
-<img src=""/>
+<img src="https://github.com/vyredo/udacity_RL_Reacher/blob/main/Report/udacity_reacher_20_agents.jpg"/>
 </a>
 
 - You can open file `Run_Pretrained.ipynb` to run it.
-- pretrained model is located at [`Report/actor.pth and Report/critic.pth`](https://github.com/vyredo/nanodegree_RL_course1/blob/main/p1_navigation/runs/Banana_Linux.pt)
+- pretrained model is located at [`Report/actor.pth and Report/critic.pth`](https://github.com/vyredo/udacity_RL_Reacher/tree/main/Report)
 
 From the video we can see that the score for each agent are from 28 to 35
 

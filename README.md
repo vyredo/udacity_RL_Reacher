@@ -6,7 +6,7 @@ This repository contains the solution to the Udacity Nanodegree project for the 
 
 ## Report
 
-Check this [link to view Report section]()
+Check this [link to view Report section](https://github.com/vyredo/udacity_RL_Reacher/blob/main/Report/Report.md)
 
 ## Getting Started
 
