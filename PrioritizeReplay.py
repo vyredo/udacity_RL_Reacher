@@ -18,10 +18,12 @@ class PrioritizedReplayMemory:
         self.seed = random.seed(seed)
 
         self.memory = []
-        self.priorities = torch.zeros(buffer_size, dtype=torch.float32, device=device)
+        self.priorities = torch.zeros(
+            buffer_size, dtype=torch.float32, device=device)
 
         self.position = 0
-        self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
+        self.experience = namedtuple("Experience", field_names=[
+                                     "state", "action", "reward", "next_state", "done"])
 
     def add(self, state, action, reward, next_state, done, priority=1.0):
         """Add a new experience to memory with a given priority."""
@@ -31,7 +33,8 @@ class PrioritizedReplayMemory:
         state = torch.tensor(state, dtype=torch.float32, device='cpu')
         action = torch.tensor(action, dtype=torch.float32, device='cpu')
         reward = torch.tensor([reward], dtype=torch.float32, device='cpu')
-        next_state = torch.tensor(next_state, dtype=torch.float32, device='cpu')
+        next_state = torch.tensor(
+            next_state, dtype=torch.float32, device='cpu')
         done = torch.tensor([float(done)], dtype=torch.float32, device='cpu')
 
         e = self.experience(state, action, reward, next_state, done)
@@ -41,22 +44,24 @@ class PrioritizedReplayMemory:
             self.memory[self.position] = e
 
         # Update priority
-        self.priorities[self.position] = max(priority, 1e-5)  # Avoid zero priority
+        self.priorities[self.position] = max(
+            priority, 1e-5)  # Avoid zero priority
         self.position = (self.position + 1) % self.buffer_size
 
     def sample(self, frame_idx, beta_start=0.4, beta_frames=100000):
-        beta = min(1.0, beta_start + frame_idx * (1.0 - beta_start) / beta_frames)
-
-        if len(self.memory) == 0:
-            raise ValueError("The replay buffer is empty. Cannot sample.")
-
-        # Compute sampling probabilities
         current_size = len(self.memory)
+        if current_size < self.batch_size:
+            raise ValueError(
+                f"Not enough samples to draw from. Need at least {self.batch_size}, got {current_size}.")
+
+        beta = min(1.0, beta_start + frame_idx *
+                   (1.0 - beta_start) / beta_frames)
+
         scaled_priorities = self.priorities[:current_size] ** self.alpha
         sampling_probs = scaled_priorities / (scaled_priorities.sum() + 1e-5)
 
-        # Sample indices based on sampling probabilities
-        indices = torch.multinomial(sampling_probs, self.batch_size, replacement=False).to(self.device)
+        indices = torch.multinomial(
+            sampling_probs, self.batch_size, replacement=False).to(self.device)
 
         # Gather sampled transitions
         experiences = [self.memory[idx] for idx in indices.tolist()]
@@ -65,7 +70,8 @@ class PrioritizedReplayMemory:
         states = torch.stack([e.state for e in experiences]).to(self.device)
         actions = torch.stack([e.action for e in experiences]).to(self.device)
         rewards = torch.stack([e.reward for e in experiences]).to(self.device)
-        next_states = torch.stack([e.next_state for e in experiences]).to(self.device)
+        next_states = torch.stack(
+            [e.next_state for e in experiences]).to(self.device)
         dones = torch.stack([e.done for e in experiences]).to(self.device)
 
         # Compute importance-sampling weights
